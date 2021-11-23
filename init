@@ -2,7 +2,7 @@ SHELL_NAME=$(basename "$SHELL")
 export SHELL_NAME
 
 if [[ "$SHELL_NAME" != "zsh" ]] && [[ "$SHELL_NAME" != "bash" ]]; then
-  echo "[xiao0yy]Only support fo zsh/bash"
+  echo "[xiao0yy]Only support fo zsh/bash, unknown: $SHELL"
   exit 0
 fi
 
