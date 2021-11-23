@@ -1,0 +1,59 @@
+SHELL_NAME=$(basename "$SHELL")
+export SHELL_NAME
+
+if [[ "$SHELL_NAME" != "zsh" ]] && [[ "$SHELL_NAME" != "bash" ]]; then
+  echo "[xiao0yy]Only support fo zsh/bash"
+  exit 1
+fi
+
+function prepend_dir() {
+  local -a dirs=()
+  [[ -d "$2" ]] && dirs+=("$2")
+  while read -rd: dir; do
+    [[ "$2" != "$dir" ]] && dirs+=("$dir")
+  done <<<"$1"
+  local IFS=":"
+  echo "${dirs[*]}"
+}
+
+PATH=$(prepend_dir "$PATH" "/opt/local/bin")
+PATH=$(prepend_dir "$PATH" "/usr/local/sbin")
+PATH=$(prepend_dir "$PATH" "$HOME/.cargo/bin")
+PATH=$(prepend_dir "$PATH" "$HOME/.local/bin")
+PATH=$(prepend_dir "$PATH" "$HOME/bin")
+export PATH
+
+# Rust(Cargo)
+if [[ -x "$(command -v bat)" ]]; then
+  alias cat="bat --style plain,header,grid"
+  if [[ -x "$(command -v rg)" ]] && [[ -x "$(command -v sk)" ]]; then
+    alias preview="rg --files | sk --ansi --preview='bat --color=always {}'"
+  fi
+fi
+if [[ -x "$(command -v exa)" ]]; then
+  alias l="exa -lbghH"
+  alias ll="exa -lbghH"
+  alias la="exa -labghH"
+  alias ld="exa -lDbghH"
+  alias lad="exa -laDbghH"
+fi
+[[ -x "$(command -v fnm)" ]] && eval "$(fnm env)"
+[[ -x "$(command -v navi)" ]] && eval "$(navi widget "$SHELL_NAME")"
+[[ -x "$(command -v starship)" ]] && eval "$(starship init "$SHELL_NAME")"
+# SDKMAN
+if [[ -d "$HOME/lib/sdkman" ]]; then
+  export SDKMAN_DIR="$HOME/lib/sdkman"
+  source "$SDKMAN_DIR/bin/sdkman-init.sh"
+fi
+# PYENV
+if [[ -d "$HOME/lib/pyenv" ]]; then
+  export PYENV_ROOT="$HOME/lib/pyenv"
+  PATH=$(prepend_dir "$PATH" "$PYENV_ROOT/bin")
+  export PATH
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+fi
+# ITERM2
+[[ -s "$HOME/lib/iterm2_shell_integration.$SHELL_NAME" ]] && source "$HOME/lib/iterm2_shell_integration.$SHELL_NAME"
+
+unset -f prepend_dir
