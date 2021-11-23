@@ -16,15 +16,13 @@ function prepend_dir() {
   echo "${dirs[*]}"
 }
 
-path_dirs="$PATH"
-path_dirs=$(prepend_dir "$path_dirs" "/bin")
+path_dirs=$(prepend_dir "$PATH" "/bin")
 path_dirs=$(prepend_dir "$path_dirs" "/usr/bin")
 path_dirs=$(prepend_dir "$path_dirs" "/usr/local/bin")
 path_dirs=$(prepend_dir "$path_dirs" "/usr/local/sbin")
 path_dirs=$(prepend_dir "$path_dirs" "/opt/local/bin")
 path_dirs=$(prepend_dir "$path_dirs" "$HOME/.cargo/bin")
 path_dirs=$(prepend_dir "$path_dirs" "$HOME/.local/bin")
-path_dirs=$(prepend_dir "$path_dirs" "$HOME/bin")
 export PATH="$path_dirs"
 
 # Rust(Cargo)
@@ -59,5 +57,10 @@ if [[ -d "$HOME/lib/pyenv" ]]; then
 fi
 # ITERM2
 [[ -s "$HOME/lib/iterm2_shell_integration.$SHELL_NAME" ]] && source "$HOME/lib/iterm2_shell_integration.$SHELL_NAME"
+# Linuxbrew
+[[ -d "$HOME/.linuxbrew" ]] && eval "$($HOME/.linuxbrew/bin/brew shellenv)"
+
+path_dirs=$(prepend_dir "$PATH" "$HOME/bin")
+export PATH="$path_dirs"
 
 unset -f prepend_dir
