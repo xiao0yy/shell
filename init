@@ -7,21 +7,25 @@ if [[ "$SHELL_NAME" != "zsh" ]] && [[ "$SHELL_NAME" != "bash" ]]; then
 fi
 
 function prepend_dir() {
+  local IFS=":"
   local -a dirs=()
   [[ -d "$2" ]] && dirs+=("$2")
-  while read -rd: dir; do
+  while read -r dir; do
     [[ "$2" != "$dir" ]] && dirs+=("$dir")
   done <<<"$1"
-  local IFS=":"
   echo "${dirs[*]}"
 }
 
-PATH=$(prepend_dir "$PATH" "/opt/local/bin")
-PATH=$(prepend_dir "$PATH" "/usr/local/sbin")
-PATH=$(prepend_dir "$PATH" "$HOME/.cargo/bin")
-PATH=$(prepend_dir "$PATH" "$HOME/.local/bin")
-PATH=$(prepend_dir "$PATH" "$HOME/bin")
-export PATH
+path_dirs="$PATH"
+path_dirs=$(prepend_dir "$path_dirs" "/bin")
+path_dirs=$(prepend_dir "$path_dirs" "/usr/bin")
+path_dirs=$(prepend_dir "$path_dirs" "/usr/local/bin")
+path_dirs=$(prepend_dir "$path_dirs" "/usr/local/sbin")
+path_dirs=$(prepend_dir "$path_dirs" "/opt/local/bin")
+path_dirs=$(prepend_dir "$path_dirs" "$HOME/.cargo/bin")
+path_dirs=$(prepend_dir "$path_dirs" "$HOME/.local/bin")
+path_dirs=$(prepend_dir "$path_dirs" "$HOME/bin")
+export PATH="$path_dirs"
 
 # Rust(Cargo)
 if [[ -x "$(command -v bat)" ]]; then
@@ -48,8 +52,8 @@ fi
 # PYENV
 if [[ -d "$HOME/lib/pyenv" ]]; then
   export PYENV_ROOT="$HOME/lib/pyenv"
-  PATH=$(prepend_dir "$PATH" "$PYENV_ROOT/bin")
-  export PATH
+  path_dirs=$(prepend_dir "$PATH" "$PYENV_ROOT/bin")
+  export PATH="$path_dirs"
   eval "$(pyenv init --path)"
   eval "$(pyenv init -)"
 fi
