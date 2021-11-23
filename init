@@ -3,7 +3,7 @@ export SHELL_NAME
 
 if [[ "$SHELL_NAME" != "zsh" ]] && [[ "$SHELL_NAME" != "bash" ]]; then
   echo "[xiao0yy]Only support fo zsh/bash"
-  exit 1
+  exit 0
 fi
 
 function prepend_dir() {
