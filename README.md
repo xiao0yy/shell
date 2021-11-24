@@ -19,7 +19,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle skywind3000/z.lua
 
-antigen bundle dracula/zsh
+antigen theme dracula/zsh dracula
 
 antigen apply
 ```
