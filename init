@@ -59,6 +59,7 @@ fi
 [[ -s "$HOME/lib/iterm2_shell_integration.$SHELL_NAME" ]] && source "$HOME/lib/iterm2_shell_integration.$SHELL_NAME"
 # Linuxbrew
 [[ -d "$HOME/.linuxbrew" ]] && eval "$($HOME/.linuxbrew/bin/brew shellenv)"
+[[ -d "/home/linuxbrew/.linuxbrew" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 path_dirs=$(prepend_dir "$PATH" "$HOME/bin")
 export PATH="$path_dirs"
