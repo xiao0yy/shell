@@ -29,3 +29,4 @@ path[1,0]=("$HOME/bin" "$HOME/.local/bin" "$HOME/.cargo/bin")
 
 export HISTSIZE=999999999
 export SAVEHIST=$HISTSIZE
+export HISTFILE="$HOME/.zsh_history"
